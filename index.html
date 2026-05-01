@@ -1,655 +1,1101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katie Gray</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>katie gray</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #2a1f14;
+  min-height: 100vh;
+  background-color: #e8e0d0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(160,140,110,0.07) 28px,
+      rgba(160,140,110,0.07) 29px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 28px,
+      rgba(160,140,110,0.07) 28px,
+      rgba(160,140,110,0.07) 29px
+    );
+  cursor: default;
+}
+#wrapper {
+  width: 960px;
+  margin: 28px auto 48px;
+}
+/* ── marquee ── */
+.marquee-strip {
+  background: #2e5f4a;
+  color: #c8ddd5;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  padding: 4px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 2px solid #1c3d2e;
+  border-bottom: none;
+}
+.marquee-inner {
+  display: inline-block;
+  animation: marquee 32s linear infinite;
+  padding-left: 100%;
+}
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+/* ── main box ── */
+#site-box {
+  background: #faf7f1;
+  border: 3px solid #8b7355;
+  box-shadow: 5px 5px 0 #c4b49a, 8px 8px 0 #8b7355;
+}
+/* ── header ── */
+#site-header {
+  background: #faf7f1;
+  border-bottom: 3px double #8b7355;
+  padding: 28px 32px 20px;
+  position: relative;
+  text-align: center;
+}
+.header-stars {
+  font-size: 11px;
+  color: #8b7355;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  font-family: 'Courier Prime', monospace;
+}
+.header-rule {
+  width: 60%;
+  margin: 0 auto 14px;
+  border: none;
+  border-top: 1px solid #c4b49a;
+}
+#site-header h1 {
+  font-family: 'Courier Prime', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2e5f4a;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.header-tagline {
+  font-family: 'Merriweather', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: #7a6040;
+  margin-bottom: 12px;
+}
+.header-info {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #5a4a32;
+  letter-spacing: 0.04em;
+}
+.header-info a {
+  color: #2e5f4a;
+  text-decoration: none;
+  border-bottom: 1px dotted #2e5f4a;
+}
+.header-info a:hover { color: #7a3020; border-bottom-color: #7a3020; }
+/* ── nav ── */
+#site-nav {
+  background: #2e5f4a;
+  border-bottom: 3px solid #1c3d2e;
+  padding: 0;
+}
+#site-nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+#site-nav a {
+  display: block;
+  padding: 9px 18px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: #c8ddd5;
+  text-decoration: none;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  transition: background 0.1s, color 0.1s;
+}
+#site-nav li:first-child a { border-left: 1px solid rgba(255,255,255,0.12); }
+#site-nav a:hover,
+#site-nav a.active {
+  background: #1c3d2e;
+  color: #e8f5f0;
+}
+#site-nav a.active::before {
+  content: '* ';
+  opacity: 0.7;
+}
+section.active {
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+/* ── layout ── */
+#site-body {
+  display: flex;
+  align-items: flex-start;
+}
+#main {
+  flex: 1;
+  padding: 28px 30px 36px;
+  border-right: 2px solid #d4c8b4;
+  min-width: 0;
+}
+section { display: none; }
+section.active { display: block; }
+.sec-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2e5f4a;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  border-bottom: 2px solid #2e5f4a;
+  padding-bottom: 5px;
+  margin-bottom: 18px;
+}
+.divider {
+  text-align: center;
+  color: #b8a888;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  letter-spacing: 6px;
+  margin: 22px 0;
+  user-select: none;
+}
+h3 {
+  font-family: 'Merriweather', serif;
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  color: #4a3520;
+  margin: 20px 0 8px;
+}
+h4 {
+  font-family: 'Merriweather', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2a1f14;
+  margin-bottom: 3px;
+}
+.small-note {
+  font-size: 12.5px;
+  color: #3a2d1e;
+  margin-bottom: 0;
+}
+.small-note-italic {
+  font-size: 12px;
+  font-style: italic;
+  color: #6a5540;
+  margin-bottom: 0;
+}
+p {
+  font-size: 13px;
+  color: #3a2d1e;
+  margin-bottom: 10px;
+}
+a { color: #2e5f4a; }
+a:hover { color: #7a3020; }
+ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 10px;
+}
+ul li {
+  font-size: 13px;
+  color: #3a2d1e;
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 4px;
+  line-height: 1.65;
+}
+ul li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: #8b7355;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  top: 1px;
+}
+/* ── intro ── */
+.intro-wrap {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.intro-photo-col {
+  flex-shrink: 0;
+  width: 148px;
+}
+.intro-photo {
+  width: 148px;
+  height: 180px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  border: 2px solid #8b7355;
+  box-shadow: 3px 3px 0 #c4b49a;
+  filter: sepia(18%) saturate(0.85);
+}
+.photo-caption {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  color: #8b7355;
+  text-align: center;
+  margin-top: 5px;
+  font-style: italic;
+}
+/* ── tags ── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+  list-style: none;
+  padding: 0;
+}
+.tags li {
+  padding: 2px 8px;
+  background: #e8e0d0;
+  border: 1px solid #b8a888;
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  color: #4a3520;
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+}
+.tags li::before { display: none; }
+/* ── project box ── */
+.project-box {
+  border: 1px solid #c4b49a;
+  background: #f3ede2;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-left: 3px solid #2e5f4a;
+}
+.project-box h4 {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2e5f4a;
+  margin-bottom: 5px;
+  letter-spacing: 0.04em;
+}
+.project-box p { margin: 0; font-size: 12.5px; }
+/* ── cv ── */
+.cv-block {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #c4b49a;
+}
+.cv-block:last-child { border-bottom: none; padding-bottom: 0; }
+.cv-date {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #8b7355;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.cv-role {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2a1f14;
+  margin-bottom: 1px;
+}
+.cv-org {
+  font-size: 12px;
+  color: #6a5540;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.cv-role-spaced {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2a1f14;
+  margin-bottom: 4px;
+}
+/* ── publications ── */
+.pub-entry {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: #f3ede2;
+  border: 1px solid #c4b49a;
+}
+.pub-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  color: #2a1f14;
+  margin-bottom: 3px;
+}
+.pub-venue {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  color: #7a6040;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.btn-small {
+  display: inline-block;
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #faf7f1;
+  background: #2e5f4a;
+  padding: 2px 8px;
+  text-decoration: none;
+  border: 1px solid #1c3d2e;
+  cursor: pointer;
+}
+.btn-small:hover { background: #7a3020; border-color: #5a2010; color: #faf7f1; }
+/* ── award ── */
+.award-box {
+  background: #f5ede0;
+  border: 1px solid #c4a882;
+  border-left: 3px solid #8b5a2a;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.award-box h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a3010;
+  margin-bottom: 2px;
+}
+.award-meta {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  color: #8b7355;
+  margin-bottom: 6px;
+}
 
-        body {
-            font-family: Georgia, 'Times New Roman', serif;
-            line-height: 1.6;
-            color: #000;
-            background-color: #fff;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background-color: #fff;
-            padding: 2rem 0 1rem 0;
-            border-bottom: 1px solid #ccc;
-        }
-
-        header h1 {
-            font-family: Georgia, 'Times New Roman', serif;
-            font-size: 3rem;
-            font-weight: normal;
-            text-align: center;
-            color: #000;
-            margin-bottom: 0.5rem;
-        }
-
-        .header-contact {
-            text-align: center;
-            color: #555;
-            font-size: 0.95rem;
-            padding: 0.5rem 0;
-        }
-
-        .header-contact a {
-            color: #8B4513;
-            text-decoration: none;
-        }
-
-        .header-contact a:hover {
-            text-decoration: underline;
-        }
-
-        .contact-separator {
-            margin: 0 0.5rem;
-        }
-
-        /* Navigation */
-        nav {
-            background-color: #0d5a6e;
-            border-bottom: 2px solid #094552;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav li {
-            margin: 0;
-        }
-
-        nav a {
-            display: block;
-            padding: 0.8rem 1.5rem;
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.05rem;
-            font-family: Arial, sans-serif;
-            font-weight: normal;
-        }
-
-        nav a:hover, nav a.active {
-            background-color: #094552;
-        }
-
-        /* Main Content */
-        main {
-            background-color: #fff;
-            margin: 0 auto;
-            padding: 2rem 20px;
-            min-height: 600px;
-        }
-
-        .main-layout {
-            display: flex;
-            gap: 2rem;
-            align-items: flex-start;
-        }
-
-        .main-content {
-            flex: 1;
-        }
-
-        .sidebar {
-            width: 280px;
-            flex-shrink: 0;
-        }
-
-        section {
-            display: none;
-        }
-
-        section.active {
-            display: block;
-        }
-
-        h2 {
-            color: #0d5a6e;
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-top: 1.5rem;
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.3rem;
-            border-bottom: 2px solid #0d5a6e;
-            font-family: Arial, sans-serif;
-        }
-
-        h3 {
-            color: #0d5a6e;
-            font-size: 1.15rem;
-            font-weight: bold;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            font-family: Arial, sans-serif;
-        }
-
-        h4 {
-            color: #333;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-top: 1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-            text-align: justify;
-        }
-
-        /* Links */
-        a {
-            color: #8B4513;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Profile Image */
-        .profile-img {
-            width: 100%;
-            border: 1px solid #999;
-            margin-bottom: 1.5rem;
-        }
-
-        .sidebar-section {
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-section h3 {
-            background-color: #6b5b95;
-            color: white;
-            padding: 0.5rem;
-            margin-bottom: 0.8rem;
-            font-size: 1rem;
-            border: none;
-        }
-
-        .sidebar-section a {
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
-        /* Paper/Publication Lists */
-        .paper-item {
-            margin-bottom: 1.8rem;
-            padding-left: 2rem;
-            position: relative;
-        }
-
-        .paper-item::before {
-            content: "📄";
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .paper-title {
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 0.2rem;
-        }
-
-        .paper-title a {
-            color: #8B4513;
-        }
-
-        .paper-authors {
-            font-style: italic;
-            margin-bottom: 0.2rem;
-        }
-
-        .paper-venue {
-            color: #555;
-            font-size: 0.95rem;
-        }
-
-        /* Project Items */
-        .project-item {
-            margin-bottom: 1.5rem;
-            border-left: 3px solid #0d5a6e;
-            padding-left: 1rem;
-        }
-
-        .project-title {
-            font-weight: bold;
-            color: #8B4513;
-            font-size: 1.05rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .project-description {
-            text-align: justify;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin-left: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Timeline/CV Items */
-        .cv-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .cv-date {
-            font-weight: bold;
-            color: #0d5a6e;
-            margin-bottom: 0.2rem;
-        }
-
-        .cv-title {
-            font-weight: bold;
-            margin-bottom: 0.2rem;
-        }
-
-        .cv-institution {
-            color: #555;
-            margin-bottom: 0.3rem;
-        }
-
-        /* Contact Info */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 0.5rem 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .contact-label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* More link */
-        .more-link {
-            text-align: right;
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #f5f5f5;
-            border-top: 1px solid #ccc;
-            padding: 1.5rem 0;
-            margin-top: 3rem;
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: #8B4513;
-            margin: 0 0.5rem;
-        }
-
-        /* Simple table styling */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 1rem 0;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 0.5rem;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f0f0f0;
-            font-weight: bold;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-layout {
-                flex-direction: column-reverse;
-            }
-
-            .sidebar {
-                width: 100%;
-            }
-
-            header h1 {
-                font-size: 2rem;
-            }
-
-            nav a {
-                padding: 0.6rem 1rem;
-                font-size: 0.95rem;
-            }
-        }
-    </style>
+/* ── teaching / worksheets ── */
+.course-entry {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #c4b49a;
+}
+.course-entry:last-of-type { border-bottom: none; }
+.course-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+.course-code {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  background: #2e5f4a;
+  color: #e8f5f0;
+  padding: 1px 6px;
+  letter-spacing: 0.06em;
+}
+.course-term {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  color: #8b7355;
+}
+.ws-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dotted #c4b49a;
+}
+.ws-entry:last-of-type { border-bottom: none; }
+.ws-week {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  background: transparent;
+  color: #8b7355;
+  padding: 0;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.ws-title {
+  font-size: 12.5px;
+  color: #2a1f14;
+  flex: 1;
+  line-height: 1.5;
+}
+.ws-topic {
+  font-size: 11px;
+  font-style: italic;
+  color: #6a5540;
+}
+/* ── contact ── */
+.contact-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.contact-tbl td {
+  padding: 7px 10px;
+  border: 1px solid #c4b49a;
+  vertical-align: top;
+  color: #3a2d1e;
+}
+.contact-tbl td:first-child {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #2e5f4a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  background: #f3ede2;
+  width: 90px;
+}
+.contact-tbl tr:nth-child(even) td:not(:first-child) { background: #f8f4ec; }
+/* ── SIDEBAR ── */
+#sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #f3ede2;
+}
+.s-widget {}
+.s-widget-body { padding: 8px 10px; }
+.s-head {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #faf7f1;
+  background: #4a3520;
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.s-head::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #b8a888;
+  flex-shrink: 0;
+}
+.s-head.green { background: #2e5f4a; }
+.s-head.rust  { background: #7a3020; }
+.s-head.slate { background: #3a4a5a; }
+.s-photo {
+  width: 100%;
+  display: block;
+  border: 2px solid #8b7355;
+  box-shadow: 2px 2px 0 #c4b49a;
+  filter: sepia(20%) saturate(0.82);
+  margin-bottom: 8px;
+}
+.s-name {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2a1f14;
+  margin-bottom: 2px;
+}
+.s-pos {
+  font-size: 11px;
+  color: #6a5540;
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+.s-pos a { color: #2e5f4a; font-size: 11px; }
+.s-links { list-style: none; padding: 0; }
+.s-links li {
+  border-bottom: 1px dotted #c4b49a;
+  padding: 0;
+}
+.s-links li::before { display: none; }
+.s-links a {
+  display: block;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #4a3520;
+  text-decoration: none;
+  padding: 5px 4px;
+  letter-spacing: 0.02em;
+  transition: background 0.1s, color 0.1s;
+}
+.s-links a:hover {
+  background: #e8e0d0;
+  color: #2e5f4a;
+  padding-left: 8px;
+}
+.s-edu-item {
+  font-size: 11.5px;
+  color: #3a2d1e;
+  padding: 6px 0;
+  border-bottom: 1px dotted #c4b49a;
+  line-height: 1.5;
+}
+.s-edu-item:last-child { border-bottom: none; }
+.s-edu-deg { font-weight: 700; color: #2a1f14; font-size: 12px; }
+.s-edu-school { color: #2e5f4a; font-size: 11px; }
+.s-edu-year { font-family: 'Courier Prime', monospace; font-size: 10px; color: #8b7355; }
+.s-update {
+  font-size: 11px;
+  color: #5a4a32;
+  padding: 5px 0;
+  border-bottom: 1px dotted #c4b49a;
+  line-height: 1.5;
+}
+.s-update:last-child { border-bottom: none; }
+.s-update-date {
+  font-family: 'Courier Prime', monospace;
+  font-size: 9.5px;
+  color: #8b7355;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1px;
+}
+.counter-box {
+  background: #2a1f14;
+  color: #98d4b8;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  text-align: center;
+  padding: 8px 6px;
+  border: 2px inset #4a3520;
+  letter-spacing: 0.06em;
+}
+.counter-num {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: #b8f0d8;
+  letter-spacing: 0.15em;
+  margin: 3px 0;
+}
+/* ── footer ── */
+#site-footer {
+  background: #2a1f14;
+  border-top: 3px double #8b7355;
+  padding: 12px 20px;
+  text-align: center;
+}
+#site-footer p {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  color: #8b7a62;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+#site-footer a {
+  color: #98d4b8;
+  text-decoration: none;
+  margin: 0 6px;
+}
+#site-footer a:hover { color: #c8e8d8; text-decoration: underline; }
+.outer-note {
+  text-align: center;
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  color: #8b7355;
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+}
+</style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <h1>Katie Gray</h1>
-                <div class="header-contact">
-                    📧 <a href="/cdn-cgi/l/email-protection#8be0eaffe2eeecf9eaf2cbe9eef9e0eee7eef2a5eeeffe">katiegray (at) berkeley.edu</a> <span class="contact-separator">•</span>
-                    🏢 Birge Hall 275 • UC Berkeley • Berkeley, CA
-            </div>
-        </div>
-    </header>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
+<div id="wrapper">
+
+  <!-- marquee -->
+  <div class="marquee-strip">
+    <span class="marquee-inner">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      * katie gray // phd student // uc berkeley physics // quantum optics // squeezed light // LIGO scientific collaboration // gravitational waves // optical parametric amplifiers // precision measurement //
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      * katie gray // phd student // uc berkeley physics // quantum optics // squeezed light // LIGO scientific collaboration // gravitational waves // optical parametric amplifiers // precision measurement //
+    </span>
+  </div>
+
+  <div id="site-box">
+
+    <!-- header -->
+    <div id="site-header">
+      <div class="header-stars">* * * * * * * * * * * * * * *</div>
+      <h1>Katie Gray</h1>
+      <div class="header-tagline">ph.d. student in physics &mdash; quantum optics &amp; precision measurement</div>
+      <hr class="header-rule"/>
+      <div class="header-info">
+        <a href="mailto:katiegray@berkeley.edu">katiegray@berkeley.edu</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        birge hall 275
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        uc berkeley
+      </div>
+    </div>
+
+    <!-- nav -->
+    <div id="site-nav">
+      <ul>
+        <li><a href="#" class="nav-link active"  onclick="show('home',this);return false;">[home]</a></li>
+        <li><a href="#" class="nav-link"          onclick="show('research',this);return false;">[research]</a></li>
+        <li><a href="#" class="nav-link"          onclick="show('outreach',this);return false;">[outreach]</a></li>
+        <li><a href="#" class="nav-link"          onclick="show('publications',this);return false;">[publications]</a></li>
+        <li><a href="#" class="nav-link"          onclick="show('teaching',this);return false;">[teaching]</a></li>
+        <li><a href="#" class="nav-link"          onclick="show('contact',this);return false;">[contact]</a></li>
+      </ul>
+    </div>
+
+    <!-- body -->
+    <div id="site-body">
+
+      <!-- main -->
+      <div id="main">
+
+        <!-- HOME -->
+        <section id="home" class="active">
+          <div class="sec-title">// about me</div>
+
+          <div class="intro-wrap">
+            <div class="intro-photo-col">
+              <img
+                src="me.jpg"
+                alt="Katie Gray"
+                class="intro-photo"
+              />
+              <div class="photo-caption">katie gray, 2025</div>
+            </div>
+            <div>
+              <p>Hello! I'm a second-year Ph.D. student in Physics at the University of California, Berkeley, working with Dr. Victoria Xu in the Q-IFO Lab for Quantum Sensing &amp; Interferometry.</p>
+              <p>My research focuses on quantum noise reduction techniques for next-generation gravitational wave detectors &mdash; specifically, using cavity QED to explore improved geometries for optical parametric amplifiers. I'm also a member of the <a href="https://www.ligo.caltech.edu/">LIGO Scientific Collaboration</a>.</p>
+              <p>Before Berkeley I got my B.S. in Physics from RPI in 2023, where I also did high-energy physics analysis with ATLAS and a semester as a visiting researcher at TU Dresden.</p>
+            </div>
+          </div>
+
+          <div class="sec-title">// research interests</div>
+          <ul class="tags">
+            <li>matter-wave interferometry</li>
+            <li>tabletop quantum gravity</li>
+            <li>squeezed state generation</li>
+            <li>LIGO</li>
+            <li>optical parametric amplification</li>
+            <li>cavity QED</li>
+            <li>AMO physics</li>
+            <li>gravitational waves</li>
+          </ul>
+
+          <div class="sec-title">// current projects</div>
+
+          <div class="project-box">
+            <h4>Interactive Squeeze @ LIGO</h4>
+            <p>An interactive GUI for visualizing noise spectra and frequency-dependent squeezing in the LIGO detectors. Models optical loss, phase noise, and cavity parameters to optimize detector sensitivity.</p>
+          </div>
+
+          <div class="project-box">
+            <h4>Optical Parametric Amplifier Simulations</h4>
+            <p>Investigating field behavior in cavities with complex geometry, how to represent losses, and optimizing cavity parameters to maximize squeezed light generation.</p>
+          </div>
+
+            <div class="project-box">
+              <h4>Squeezed Light @ Berkeley</h4>
+              <p>Using Boyd-Kleinman theory and exact OPA formalism to jointly optimize crystal length, input coupler transmissivity, pump beam waist, and bowtie cavity geometry for the Berkeley squeezer.</p>
+            </div>
+
+        </section>
+
+        <!-- RESEARCH -->
+        <section id="research">
+
+        <div class="sec-title">// research experience</div>
+
+          <div class="project-box">
+            <h4>Interactive Squeeze @ LIGO</h4>
+            <p>An interactive GUI for visualizing noise spectra and frequency-dependent squeezing in the LIGO detectors. Models optical loss, phase noise, and cavity parameters to optimize detector sensitivity.</p>
+          </div>
+
+          <div class="project-box">
+            <h4>Optical Parametric Amplifier Simulations</h4>
+            <p>Investigating field behavior in cavities with complex geometry, how to represent losses, and optimizing cavity parameters to maximize squeezed light generation.</p>
+          </div>
+
+            <div class="project-box">
+              <h4>Squeezed Light @ Berkeley</h4>
+              <p>Using Boyd-Kleinman theory and exact OPA formalism to jointly optimize crystal length, input coupler transmissivity, pump beam waist, and bowtie cavity geometry for the Berkeley squeezer.</p>
+          </div>
+
+
+          <h3>AMO physics</h3>
+
+          <div class="cv-block">
+            <div class="cv-date">2025 &ndash; present</div>
+            <div class="cv-role">Graduate Research Assistant</div>
+            <div class="cv-org">Xu Lab &mdash; UC Berkeley</div>
             <ul>
-                <li><a href="#home" class="nav-link active" onclick="showSection('home', this); return false;">Home</a></li>
-                <li><a href="#research" class="nav-link" onclick="showSection('research', this); return false;">Research</a></li>
-                <li><a href="#notebooks" class="nav-link" onclick="showSection('notebooks', this); return false;">Notebooks</a></li>
-                <li><a href="#publications" class="nav-link" onclick="showSection('publications', this); return false;">Publications</a></li>
-                <li><a href="#teaching" class="nav-link" onclick="showSection('teaching', this); return false;">Teaching</a></li>
-                <li><a href="#contact" class="nav-link" onclick="showSection('contact', this); return false;">Contact</a></li>
+              <li>Member of the LIGO Scientific Collaboration developing technologies for broadband, tunable, and robust frequency-dependent squeezing.</li>
+              <li>Built an interactive GUI for exploring optical loss, phase noise, and frequency-dependent effects in LIGO detector systems.</li>
             </ul>
-        </div>
-    </nav>
+          </div>
 
-    <!-- Main Content -->
-    <main>
-        <div class="container">
-            <div class="main-layout">
-                <!-- Main Content Area -->
-                <div class="main-content">
-                    <!-- HOME SECTION -->
-                    <section id="home" class="active">
-                        <p>Katie Gray is a Ph.D. student in Physics at the University of California, Berkeley, working with Dr. Victoria Xu. Her research interests span quantum metrology, gravitational wave detection, and atomic, molecular, and optical (AMO) physics, with emphasis on quantum noise reduction techniques for precision measurements.</p>
+          <h3>Nuclear physics</h3>
 
-                        <p>My current work focuses on using cavity qed to explore new geometries for improved squeezing in optical parametric amplifiers. I am also interested in developing tools and simulations that help understand quantum noise in precision measurement systems.</p>
+          <div class="cv-block">
+            <div class="cv-date">2024 &ndash; 2025</div>
+            <div class="cv-role">Graduate Summer Research Assistant</div>
+            <div class="cv-org">Jacak Lab &mdash; UC Berkeley &amp; LBNL</div>
+            <ul>
+              <li>Contributed to silicon vertex detector development for the Electron-Ion Collider (EIC).</li>
+              <li>Conducted air cooling studies for the ePIC Silicon Vertex Tracker.</li>
+              <li>Performed thermal analysis and optimization of detector cooling systems.</li>
+            </ul>
+          </div>
 
-                        <p>I received my B.S. in Physics from Rensselaer Polytechnic Institute in 2023. Before beginning grad school, I spent several months working as an au pair in Bayreuth, Germany, where I spent my time exploring the city and developing a love for opera.</p>
+          <h3>High-Energy physics</h3>
 
-                        <h2>Research Interests</h2>
-                        <ul>
-                            <li>Quantum metrology and precision measurements</li>
-                            <li>Quantum noise reduction and squeezing techniques for LIGO</li>
-                            <li>Gravitometry & tabletop probes of quantum gravity</li>
-                            <li>Next-Generation gravitational wave detector R&D</li>
-                        </ul>
+          <div class="cv-block">
+            <div class="cv-date">2022 &ndash; 2023</div>
+            <div class="cv-role">Visiting Researcher</div>
+            <div class="cv-org">Technical University of Dresden &mdash; Saxony, Germany &nbsp;&middot;&nbsp; Advisor: Dr. Siegert</div>
+            <ul>
+              <li>Extended the CERN ATLAS Open Data tool with new fitting functions and machine learning methods via Jupyter notebook.</li>
+              <li>Wrote task sheets and documentation for a masters-level laboratory course on computational methods for proton-proton collision analysis.</li>
+            </ul>
+          </div>
 
-                        <h2>Current Projects</h2>
+          <div class="sec-title">// education</div>
 
-                        <div class="project-item">
-                            <div class="project-title">Interactive Squeeze @ LIGO</div>
-                            <div class="project-description">
-                                Developing an interactive GUI to visualize and analyze noise spectra and frequency-dependent squeezing in the LIGO detectors. This work includes modeling optical loss, phase noise, and detector parameters to optimize detector sensitivity.
-                            </div>
-                        </div>
+          <div class="cv-block">
+            <div class="cv-date">2024 &ndash; present</div>
+            <div class="cv-role">Ph.D. in Physics</div>
+            <div class="cv-org">University of California, Berkeley</div>
+            <p class="small-note">Advisor: Dr. Victoria Xu</p>
+          </div>
 
-                        <div class="project-item">
-                            <div class="project-title">Optical Parametric Amplifier Simulations</div>
-                            <div class="project-description">
-                                Investigating the behavior of fields in cavities with complex geometry, how to represent losses, and optimizing cavity parameters to maximize squeezed light generation. 
-                            </div>
-                        </div>
+          <div class="cv-block">
+            <div class="cv-date">2020 &ndash; 2023</div>
+            <div class="cv-role">B.S. in Physics</div>
+            <div class="cv-org">Rensselaer Polytechnic Institute &mdash; Troy, NY</div>
+          </div>
+        </section>
 
-                    </section>
+        <!-- OUTREACH -->
+        <section id="outreach">
+          <div class="sec-title">// mentoring &amp; outreach</div>
 
-                    <!-- RESEARCH SECTION -->
-                    <section id="research">
-                        <h2>Research</h2>
+          <div class="cv-block">
+            <div class="cv-date">2024 &ndash; 2025</div>
+            <div class="cv-role">MPS Scholars Graduate Mentor</div>
+            <div class="cv-org">UC Berkeley</div>
+            <p class="small-note">Mentored undergraduates from underrepresented backgrounds in mathematics and the physical sciences through the MPS Scholars program.</p>
+          </div>
 
-                        <h3>AMO Physics Research</h3>
-                        <div class="cv-item">
-                            <div class="cv-date">2025 - Present</div>
-                            <div class="cv-title">Graduate Research Assistant</div>
-                            <div class="cv-institution">Xu Lab, UC Berkeley</div>
-                            <ul>
-                                <li>Member of the LIGO Scientific Collaboration developing technologies to enable higher levels of broadband, tunable, and robust frequency-dependent squeezing.</li>
-                                <li>Developed an interactive GUI tool, providing a user-friendly interface for exploring optical loss, phase noise, and frequency-dependent effects</li>
-                            </ul>
-                        </div>
+          <div class="cv-block">
+            <div class="cv-date">2024 &amp; 2025</div>
+            <div class="cv-role">Physics Directed Reading Program Mentor</div>
+            <div class="cv-org">UC Berkeley</div>
+            <p class="small-note">Guided undergraduates through independent reading projects in physics beyond the standard curriculum.</p>
+          </div>
 
-                        <h3>Nuclear Physics Research</h3>
-                        <div class="cv-item">
-                            <div class="cv-date">2024 - 2025</div>
-                            <div class="cv-title">Graduate Summer Research Assistant</div>
-                            <div class="cv-institution">Jacak Lab, UC Berkeley & LBNL</div>
-                            <ul>
-                                <li>Contributed to the development of silicon vertex detector systems for the Electron-Ion Collider (EIC)</li>
-                                <li>Conducted air cooling studies for the ePIC Silicon Vertex Tracker</li>
-                                <li>Performed thermal analysis and optimization of detector cooling systems</li>
-                            </ul>
-                        </div>
+          <div class="cv-block">
+            <div class="cv-date">2022 &ndash; 2023</div>
+            <div class="cv-role">Women+ In Physics Chapter President</div>
+            <div class="cv-org">Rensselaer Polytechnic Institute</div>
+            <p class="small-note">Led the campus chapter promoting inclusion and community for women and gender minorities in physics. Organized speaker series, mentorship programs, and outreach events.</p>
+          </div>
 
-                        
-                        <h2>Current Projects</h2>
+          <div class="cv-block">
+            <div class="cv-date">2022</div>
+            <div class="cv-role">High School Research Supervisor</div>
+            <div class="cv-org">Network Particle World &mdash; TU Dresden</div>
+            <p class="small-note">Developed curriculum and project goals for a high school student completing a Z-boson invariant mass analysis using ATLAS Open Data.</p>
+          </div>
+        </section>
 
-                        <div class="project-item">
-                            <div class="project-title">Interactive Squeeze @ LIGO</div>
-                            <div class="project-description">
-                                Developing an interactive GUI to visualize and analyze noise spectra and frequency-dependent squeezing in the LIGO detectors. This work includes modeling optical loss, phase noise, and detector parameters to optimize detector sensitivity.
-                            </div>
-                        </div>
+        <!-- PUBLICATIONS -->
+        <section id="publications">
+          <div class="sec-title">// publications &amp; presentations</div>
 
-                        <div class="project-item">
-                            <div class="project-title">Optical Parametric Amplifier Simulations</div>
-                            <div class="project-description">
-                                Investigating the behavior of fields in cavities with complex geometry, how to represent losses, and optimizing cavity parameters to maximize squeezed light generation. 
-                            </div>
-                        </div>
+          <h3>conference presentations</h3>
 
-                    </section>
+          <div class="pub-entry">
+            <div class="pub-title">"Air Cooling Studies for the ePIC Silicon Vertex Tracker"</div>
+            <div class="pub-venue">California EIC Consortium &nbsp;&middot;&nbsp; Cal Poly SLO &nbsp;&middot;&nbsp; July 2025</div>
+            <a class="btn-small" href="#">slides</a>
+          </div>
 
-                    <!-- NOTEBOOKS SECTION -->
-                    <section id="notebooks">
-                        <h2>Computational Notebooks</h2>
-                        <p>All notebooks are available on GitHub and can be run in Google Colab for interactive exploration.</p>
+          <div class="sec-title">// awards &amp; honors</div>
 
-                        <h3>Optical Systems & Gaussian Beam Analysis</h3>
+          <div class="award-box">
+            <h4>Nadia Trinkala Service Award</h4>
+            <div class="award-meta">Rensselaer Polytechnic Institute &nbsp;&middot;&nbsp; 2024</div>
+            <p class="small-note">Awarded to a physics student who has made significant contributions to the RPI community and the City of Troy. Recognized for leadership as Women+ in Physics Chapter President and sustained commitment to inclusion in the physical sciences.</p>
+          </div>
 
-                        <div class="paper-item">
-                            <div class="paper-title"><a href="https://github.com/katiegrayy/katiegrayy.github.io/blob/main/beamsize.ipynb">Gaussian Beam Collimation</a></div>
-                            <div class="paper-venue">October 2025</div>
-                            <p>This notebook calculates the optimal focal length of an aspheric lens to collimate a beam given a desired beam diameter and known beam divergence. The tool accounts for fiber numerical aperture and provides complete beam propagation analysis.</p>
-                            <p><strong>Topics:</strong> Gaussian beam propagation, optical design, fiber optics</p>
-                            <p><a href="https://github.com/katiegrayy/katiegrayy.github.io/blob/main/beamsize.ipynb">[Preview]</a> <a href="#">[Open in Colab]</a></p>
-                        </div>
+          <div class="sec-title">// affiliations</div>
+          <ul>
+            <li>LIGO Scientific Collaboration</li>
+            <li>Society of Women in Physics</li>
+          </ul>
+        </section>
 
-                        <div class="paper-item">
-                            <div class="paper-title"><a href="https://github.com/katiegrayy/katiegrayy.github.io/blob/main/modematching.ipynb">Mode Matching Optimization Tool</a></div>
-                            <div class="paper-venue">October 2025</div>
-                            <p>An interactive tool for optimizing lens positions to maximize coupling efficiency between Gaussian beams. Features include beam waist fitting, multi-lens optimization with configurable bounds, and visualization of beam propagation and Gouy phase evolution through optical systems.</p>
-                            <p><strong>Topics:</strong> Mode matching, optical coupling, beam propagation, optimization algorithms</p>
-                            <p><a href="https://github.com/katiegrayy/katiegrayy.github.io/blob/main/modematching.ipynb">[Preview]</a> <a href="#">[Open in Colab]</a></p>
-                        </div>
+        <!-- TEACHING -->
+        <section id="teaching">
+          <div class="sec-title">// teaching</div>
+          <h3>graduate student instructor &mdash; uc berkeley</h3>
 
-                        <h3>Additional Resources</h3>
-                        <p>More notebooks and computational tools are in development. Check the <a href="https://github.com/katiegrayy">GitHub repository</a> for updates.</p>
-                    </section>
-
-                    <!-- PUBLICATIONS SECTION -->
-                    <section id="publications">
-                        <h2>Publications & Presentations</h2>
-
-                        <h3>Conference Presentations</h3>
-                        <div class="cv-item">
-                            <div class="cv-date">July 2025</div>
-                            <p><strong>"Air Cooling Studies for the ePIC Silicon Vertex Tracker"</strong><br>
-                            California EIC Consortium, Cal Poly San Luis Obispo</p>
-                        </div>
-
-                        <h3>Awards & Honors</h3>
-                        <ul>
-                            <li><strong>Nadia Trinkala Service Award</strong> (Rensselaer Polytechnic Institute, 2024) - Awarded to a student majoring in Physics or Applied Physics who has made significant contributions to the community and to the quality of life at Rensselaer and the City of Troy.</li>
-                        </ul>
-
-                        <h3>Professional Affiliations</h3>
-                        <ul>
-                            <li>LIGO Scientific Collaboration</li>
-                            <li>Society of Women in Physics</li>
-                        </ul>
-                    </section>
-
-                    <!-- TEACHING SECTION -->
-                    <section id="teaching">
-                        <h2>Teaching</h2>
-
-                        <h3>Graduate Student Instructor</h3>
-                        
-                        <div class="cv-item">
-                            <div class="cv-date">Spring & Fall 2025</div>
-                            <div class="cv-title">Physics 10: Descriptive Introduction to Physics</div>
-                            <div class="cv-institution">UC Berkeley</div>
-                            <p>Discussion section instructor for introductory physics course for non-majors. Created acvtivities and lecture slides covering a wide array of topics from quantum entanglement to fusion.</p>
-                        </div>
-
-                        <div class="cv-item">
-                            <div class="cv-date">Fall 2024</div>
-                            <div class="cv-title">Physics 7A: Physics for Scientists and Engineers</div>
-                            <div class="cv-institution">UC Berkeley</div>
-                            <p>Discussion section and lab instructor for calculus-based mechanics course. Covered kinematics, dynamics, energy, momentum, rotation, and oscillations.</p>
-                        </div>
-
-                        <h3>Mentoring & Outreach</h3>
-                        <ul>
-                            <li><strong>MPS Scholars Graduate Mentor</strong> (Fall 2024 - Summer 2025) - Mentoring undergraduate students from underrepresented backgrounds in mathematics and physical sciences.</li>
-                            <li><strong>Physics Directed Reading Program Mentor</strong> (Fall 2024 & 2025) - Guiding undergraduate students through independent reading projects in physics.</li>
-                            <li><strong>Women+ In Physics Chapter President</strong> (Fall 2022 - Fall 2023, RPI) - Led organization promoting inclusion and support for women and gender minorities in physics.</li>
-                        </ul>
-                    </section>
-
-                    <!-- CONTACT SECTION -->
-                    <section id="contact">
-                        <h2>Contact Information</h2>
-                        
-                        <p>I'm always interested in discussing research, potential collaborations, or opportunities. Feel free to reach out!</p>
-
-                        <div class="contact-grid">
-                            <div class="contact-label">Email:</div>
-                            <div><a href="/cdn-cgi/l/email-protection#8be0eaffe2eeecf9eaf2cbe9eef9e0eee7eef2a5eeeffe">katiegray (at) berkeley.edu</a> <span class="contact-separator"></span></div>
-
-                            <div class="contact-label">Office:</div>
-                            <div>Birge Hall, Room 275</div>
-
-                            <div class="contact-label">Address:</div>
-                            <div>Department of Physics<br>
-                            University of California, Berkeley<br>
-                            Berkeley, CA 94720</div>
-
-                            <div class="contact-label">GitHub:</div>
-                            <div><a href="https://github.com/katiegrayy" target="_blank">@katiegrayy</a></div>
-
-                            <div class="contact-label">LinkedIn:</div>
-                            <div><a href="https://www.linkedin.com/in/katie-gray-210768193/" target="_blank">Katie Gray</a></div>
-                        </div>
-
-                        <h3>Office Hours</h3>
-                        <strong>By Appointment:</strong> Email to schedule alternative times</p>
-                    </section>
-                </div>
-
-                <!-- Sidebar -->
-                <aside class="sidebar">
-                    <img src="me.JPG" alt="Katie Gray" class="profile-img">
-                    
-                    <div class="sidebar-section">
-                        <h3>Quick Links</h3>
-                        <a href="/cdn-cgi/l/email-protection#600b07120119200205120b050c05194e050415">Email</a>
-                        <a href="https://github.com/katiegrayy" target="_blank">GitHub</a>
-                        <a href="https://www.linkedin.com/in/katie-gray-210768193/" target="_blank">LinkedIn</a>
-                        <a href="#">CV (PDF)</a>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <h3>Current Position</h3>
-                        <p><strong>Ph.D. Student</strong><br>
-                        Physics Department<br>
-                        UC Berkeley</p>
-                        <p><strong>Advisor:</strong><br>
-                        Dr. Victoria Xu</p>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <h3>Education</h3>
-                        <p><strong>Ph.D. in Physics</strong><br>
-                        UC Berkeley<br>
-                        2024 - Present</p>
-                        <p><strong>B.S. in Physics</strong><br>
-                        Rensselaer Polytechnic Institute<br>
-                        2020 - 2023</p>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <h3>Research Groups</h3>
-                        <a href="https://q-ifo.github.io/">Xu Lab</a>
-                        <a href="https://www.ligo.caltech.edu/">LIGO Scientific Collaboration</a>
-                    </div>
-                </aside>
+          <div class="course-entry">
+            <div class="course-header">
+              <span class="course-code">Physics 10</span>
+              <span class="course-term">spring &amp; fall 2025</span>
             </div>
+            <div class="cv-role-spaced">Descriptive Introduction to Physics</div>
+            <p class="small-note">Discussion section instructor for an introductory physics course for non-majors. Designed activities and lecture slides spanning quantum entanglement to nuclear fusion, with an emphasis on scientific literacy.</p>
+          </div>
+          
+          <div class="course-entry">
+            <div class="ws-entry">
+              <span class="ws-week">week 01</span>
+              <span class="ws-title">
+                Particle-Wave Duality &mdash; <span class="ws-topic">The Double Slit Experiment</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_1.pdf');return false;" href="#">view pdf</a>
+            </div>
+
+            <div class="ws-entry">
+              <span class="ws-week">week 02</span>
+              <span class="ws-title">
+                Electron Models &mdash; <span class="ws-topic">Understanding the Hydrogen Atom</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_2.pdf');return false;" href="#">view pdf</a>
+            </div>
+
+            <div class="ws-entry">
+              <span class="ws-week">week 03</span>
+              <span class="ws-title">
+                Tunelling &mdash; <span class="ws-topic">Tunelling in Electrical Engineering, Biophysics, and the World</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_3.pdf');return false;" href="#">view pdf</a>
+            </div>
+            
+            <div class="ws-entry">
+              <span class="ws-week">week 04</span>
+              <span class="ws-title">
+                Quantum Physics Interpretations &mdash; <span class="ws-topic">Many Worlds, Hidden Variables, and Unsolved Mysteries</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_4.pdf');return false;" href="#">view pdf</a>
+            </div>
+
+            <div class="ws-entry">
+              <span class="ws-week">week 06</span>
+              <span class="ws-title">
+                The Fusion Challenge &mdash; <span class="ws-topic">Build Your Own Fusion Reactor</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_6.pdf');return false;" href="#">view pdf</a>
+            </div>
+            
+            <div class="ws-entry">
+              <span class="ws-week">week 07</span>
+              <span class="ws-title">
+                Neutrinos &mdash; <span class="ws-topic">Oscillations, Superposition &amp; Quantum States</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_7.pdf');return false;" href="#">view pdf</a>
+            </div>
+
+            <div class="ws-entry">
+              <span class="ws-week">week 09</span>
+              <span class="ws-title">
+                Quantum Computing &mdash; <span class="ws-topic">Introduction to Quantum Gates and Superposition</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_9.pdf');return false;" href="#">view pdf</a>
+            </div>
+
+            <div class="ws-entry">
+              <span class="ws-week">week 10</span>
+              <span class="ws-title">
+                Quantum Computing II &mdash; <span class="ws-topic">Implementing Quantum Circuits with IBM</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_10.pdf');return false;" href="#">view pdf</a>
+            </div>
+
+            <div class="ws-entry">
+              <span class="ws-week">week 11</span>
+              <span class="ws-title">
+                Quantum Information &mdash; <span class="ws-topic">Qubits and Information Theory, Entropy, and Cloning</span>
+              </span>
+              <a class="btn-small" onclick="openPDF('Worksheets/Week_11.pdf');return false;" href="#">view pdf</a>
+            </div>
+          </div>
+
+
+
+          <div class="course-entry">
+            <div class="course-header">
+              <span class="course-code">Physics 7A</span>
+              <span class="course-term">fall 2024</span>
+            </div>
+            <div class="cv-role-spaced">Physics for Scientists and Engineers</div>
+            <p class="small-note">Discussion section and lab instructor for calculus-based mechanics. Topics: kinematics, dynamics, energy, momentum, rotational motion, and oscillations.</p>
+          </div>
+
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+          <div class="sec-title">// contact</div>
+          <p>Always happy to discuss research, potential collaborations, or opportunities.</p>
+
+          <table class="contact-tbl">
+            <tr>
+              <td>email</td>
+              <td><a href="mailto:katiegray@berkeley.edu">katiegray@berkeley.edu</a></td>
+            </tr>
+            <tr>
+              <td>office</td>
+              <td>Birge Hall, Room 275</td>
+            </tr>
+            <tr>
+              <td>address</td>
+              <td>Department of Physics<br>University of California, Berkeley<br>Berkeley, CA 94720</td>
+            </tr>
+            <tr>
+              <td>github</td>
+              <td><a href="https://github.com/katiegrayy" target="_blank">@katiegrayy</a></td>
+            </tr>
+            <tr>
+              <td>linkedin</td>
+              <td><a href="https://www.linkedin.com/in/katie-gray-210768193/" target="_blank">katie gray</a></td>
+            </tr>
+            <tr>
+              <td>hours</td>
+              <td>by appointment &mdash; email to schedule</td>
+            </tr>
+          </table>
+        </section>
+
+      </div><!-- /main -->
+
+      <!-- SIDEBAR -->
+      <div id="sidebar">
+
+        <!-- profile -->
+        <div class="s-widget">
+          <div class="s-head green">profile</div>
+          <img
+            src="me.JPG"
+            alt="Katie Gray"
+            class="s-photo"
+          />
+          <div class="s-name">Katie Gray</div>
+          <div class="s-pos">
+            Ph.D. Student, Physics<br>
+            UC Berkeley<br>
+            <br>
+            Advisor: Dr. Victoria Xu<br>
+            <a href="https://q-ifo.github.io/" target="_blank">Xu Lab</a>
+          </div>
         </div>
-    </main>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Katie Gray. All rights reserved.</p>
-            <p>Last updated: February 4, 2026</p>
-            <p>
-                <a href="https://github.com/katiegrayy">GitHub</a> | 
-                <a href="https://scholar.google.com">Google Scholar</a> | 
-                <a href="https://www.linkedin.com/in/katie-gray-210768193/">LinkedIn</a>
-            </p>
+        <!-- links -->
+        <div class="s-widget">
+          <div class="s-head">links</div>
+          <ul class="s-links">
+            <li><a href="mailto:katiegray@berkeley.edu">email me</a></li>
+            <li><a href="https://github.com/katiegrayy" target="_blank">github</a></li>
+            <li><a href="https://www.linkedin.com/in/katie-gray-210768193/" target="_blank">linkedin</a></li>
+            <li><a href="https://q-ifo.github.io/" target="_blank">xu lab</a></li>
+            <li><a href="https://www.ligo.caltech.edu/" target="_blank">LIGO collab.</a></li>
+            <li><a href="#">download cv (pdf)</a></li>
+          </ul>
         </div>
-    </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Navigation functionality
-        function showSection(sectionId, clickedLink) {
-            // Hide all sections
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
+        <!-- education -->
+        <div class="s-widget">
+          <div class="s-head rust">education</div>
+          <div class="s-edu-item">
+            <div class="s-edu-deg">Ph.D. Physics</div>
+            <div class="s-edu-school">UC Berkeley</div>
+            <div class="s-edu-year">2024 &ndash; present</div>
+          </div>
+          <div class="s-edu-item">
+            <div class="s-edu-deg">B.S. Physics</div>
+            <div class="s-edu-school">RPI</div>
+            <div class="s-edu-year">2020 &ndash; 2023</div>
+          </div>
+        </div>
 
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
+        <!-- current counter -->
+        <div class="counter-box">
+          currently working on<br>
+          <span class="counter-num" style="font-size:12px; letter-spacing:0.05em; line-height:1.6">bowtie cavity<br>geometry</span>
+        </div>
 
-            // Update active nav link
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
-            if (clickedLink) {
-                clickedLink.classList.add('active');
-            }
+      </div><!-- /sidebar -->
 
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    </div><!-- /site-body -->
 
-        // Initialize - show home section on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            showSection('home');
-        });
-    </script>
+    <!-- footer -->
+    <div id="site-footer">
+      <p>
+        &copy; 2026 katie gray &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="https://github.com/katiegrayy" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/katie-gray-210768193" target="_blank" rel="noopener">linkedin</a>
+        <a href="#">cv</a>
+      </p>
+      <p>last updated: may 2026 &nbsp;&nbsp;|&nbsp;&nbsp; best viewed at 1024px or wider</p>
+    </div>
+
+  </div><!-- /site-box -->
+
+  <div class="outer-note">made with coffee // university of california, berkeley // department of physics</div>
+
+</div><!-- /wrapper -->
+
+<script>
+  function show(id, link) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (link) link.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function openPDF(src) {
+    window.open(src, '_blank');
+  }
+</script>
+</body>
+</html>
