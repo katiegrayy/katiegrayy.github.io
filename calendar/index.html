@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Planner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #ffffff;
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --border: #e8eaed;
+    --text: #1a1a2e;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --accent: #4f6ef7;
+    --accent-light: #e8edff;
+    --accent-hover: #3b5de7;
+    --success: #22c55e;
+    --success-light: #dcfce7;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.03);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.06);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --transition: 0.2s ease;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .header h1 span { color: var(--accent); }
+  .header-date {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 57px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-section {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-section:last-child { border-bottom: none; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* Task Input */
+  .task-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .task-input-row {
+    display: flex;
+    gap: 8px;
+  }
+  .task-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition);
+    background: var(--white);
+  }
+  .task-input:focus { border-color: var(--accent); }
+  .task-input::placeholder { color: var(--text-muted); }
+
+  .task-meta-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .task-meta-row input[type="date"] {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+    color: var(--text-secondary);
+    background: var(--white);
+    cursor: pointer;
+  }
+  .task-meta-row input[type="date"]:focus { border-color: var(--accent); }
+
+  .priority-select {
+    padding: 8px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+    background: var(--white);
+    color: var(--text-secondary);
+    cursor: pointer;
+    min-width: 90px;
+  }
+  .priority-select:focus { border-color: var(--accent); }
+
+  .add-btn {
+    padding: 10px 18px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .add-btn:active { transform: translateY(0); }
+
+  /* Progress Overview */
+  .progress-card {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .progress-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .progress-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .progress-bar-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--success));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .stat {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .stat strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Task List */
+  .task-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px 20px;
+  }
+  .task-list::-webkit-scrollbar { width: 4px; }
+  .task-list::-webkit-scrollbar-track { background: transparent; }
+  .task-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    animation: fadeIn 0.25s ease;
+  }
+  .task-item:last-child { border-bottom: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .task-bubble {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all var(--transition);
+    flex-shrink: 0;
+    margin-top: 1px;
+    position: relative;
+    background: var(--white);
+  }
+  .task-bubble:hover {
+    border-color: var(--success);
+    background: var(--success-light);
+  }
+  .task-bubble.done {
+    border-color: var(--success);
+    background: var(--success);
+  }
+  .task-bubble.done::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 5px;
+    width: 6px; height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .task-content { flex: 1; min-width: 0; }
+  .task-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .task-item.completed .task-name {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+  .task-details {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .task-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .tag-high { background: var(--danger-light); color: var(--danger); }
+  .tag-medium { background: var(--warning-light); color: var(--warning); }
+  .tag-low { background: var(--accent-light); color: var(--accent); }
+  .task-deadline {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .task-deadline.overdue { color: var(--danger); font-weight: 600; }
+
+  .task-delete {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    opacity: 0;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+  .task-item:hover .task-delete { opacity: 1; }
+  .task-delete:hover { background: var(--danger-light); color: var(--danger); }
+
+  .empty-tasks {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .empty-tasks svg {
+    margin-bottom: 12px;
+    opacity: 0.3;
+  }
+
+  /* Main Content - Calendar */
+  .main {
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .calendar-nav-btn {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    color: var(--text-secondary);
+    font-size: 16px;
+  }
+  .calendar-nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+  .calendar-month {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .today-btn {
+    padding: 8px 16px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .today-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  /* Calendar Grid */
+  .calendar-grid {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .calendar-weekday {
+    padding: 10px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+  }
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .calendar-day {
+    min-height: 110px;
+    padding: 8px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background var(--transition);
+    position: relative;
+  }
+  .calendar-day:nth-child(7n) { border-right: none; }
+  .calendar-day:hover { background: var(--bg); }
+  .calendar-day.other-month { background: #fbfbfc; }
+  .calendar-day.other-month .day-number { color: var(--text-muted); opacity: 0.4; }
+  .calendar-day.today {
+    background: var(--accent-light);
+  }
+  .calendar-day.today .day-number {
+    background: var(--accent);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .calendar-day.selected {
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+
+  .day-number {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: inline-block;
+  }
+  .day-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .day-task-pill {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--success-light);
+    color: #15803d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+  }
+  .day-task-more {
+    font-size: 10px;
+    color: var(--text-muted);
+    padding: 1px 6px;
+    font-weight: 500;
+  }
+  .day-summary-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Day Detail Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 480px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+  }
+  .modal-close:hover { background: var(--danger-light); color: var(--danger); }
+
+  .modal-body { padding: 24px; }
+
+  .modal-section {
+    margin-bottom: 20px;
+  }
+  .modal-section:last-child { margin-bottom: 0; }
+  .modal-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .modal-task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .modal-task-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--success-light);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: #15803d;
+    font-weight: 500;
+  }
+  .modal-task-item svg { flex-shrink: 0; }
+  .modal-task-remove {
+    margin-left: auto;
+    border: none;
+    background: none;
+    color: #15803d;
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 14px;
+    padding: 2px;
+    border-radius: 4px;
+  }
+  .modal-task-remove:hover { opacity: 1; background: rgba(0,0,0,0.05); }
+
+  .summary-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color var(--transition);
+    line-height: 1.6;
+  }
+  .summary-textarea:focus { border-color: var(--accent); }
+  .summary-textarea::placeholder { color: var(--text-muted); }
+
+  .save-btn {
+    padding: 10px 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background var(--transition);
+    margin-top: 12px;
+  }
+  .save-btn:hover { background: var(--accent-hover); }
+
+  .no-tasks-msg {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Filter tabs */
+  .filter-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+  .filter-tab {
+    padding: 6px 12px;
+    border: none;
+    background: none;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all var(--transition);
+  }
+  .filter-tab:hover { background: var(--bg); color: var(--text-secondary); }
+  .filter-tab.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      max-height: 50vh;
+    }
+    .calendar-day { min-height: 80px; }
+  }
+  @media (max-width: 600px) {
+    .header { padding: 14px 16px; }
+    .main { padding: 16px; }
+    .calendar-month { font-size: 18px; }
+    .calendar-day { min-height: 60px; padding: 4px; }
+    .day-task-pill { font-size: 9px; }
+    .day-number { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>&#9673;</span> Daily Planner</h1>
+  <div class="header-date" id="headerDate"></div>
+</div>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Add Task -->
+    <div class="sidebar-section">
+      <div class="section-title">New Task</div>
+      <div class="task-input-group">
+        <input type="text" class="task-input" id="taskInput" placeholder="What needs to be done?" />
+        <div class="task-meta-row">
+          <input type="date" id="taskDeadline" title="Deadline" />
+          <select class="priority-select" id="taskPriority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <button class="add-btn" id="addBtn">Add Task</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="sidebar-section">
+      <div class="section-title">Progress</div>
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-label">Tasks completed</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="progress-stats">
+          <div class="stat"><strong id="statActive">0</strong> active</div>
+          <div class="stat"><strong id="statDone">0</strong> done</div>
+          <div class="stat"><strong id="statOverdue">0</strong> overdue</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="sidebar-section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding-bottom:0;">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-filter="active">Active</button>
+        <button class="filter-tab" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="completed">Done</button>
+      </div>
+      <div class="task-list" id="taskList">
+        <div class="empty-tasks" id="emptyMsg">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <div>No tasks yet. Add one above!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main: Calendar -->
+  <div class="main">
+    <div class="calendar-header">
+      <div class="calendar-nav">
+        <button class="calendar-nav-btn" id="prevMonth">&#8249;</button>
+        <span class="calendar-month" id="calendarMonth"></span>
+        <button class="calendar-nav-btn" id="nextMonth">&#8250;</button>
+      </div>
+      <button class="today-btn" id="todayBtn">Today</button>
+    </div>
+    <div class="calendar-grid">
+      <div class="calendar-weekdays">
+        <div class="calendar-weekday">Sun</div>
+        <div class="calendar-weekday">Mon</div>
+        <div class="calendar-weekday">Tue</div>
+        <div class="calendar-weekday">Wed</div>
+        <div class="calendar-weekday">Thu</div>
+        <div class="calendar-weekday">Fri</div>
+        <div class="calendar-weekday">Sat</div>
+      </div>
+      <div class="calendar-days" id="calendarDays"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Day Detail Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Completed Tasks</div>
+        <div class="modal-task-list" id="modalTasks"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Daily Summary</div>
+        <textarea class="summary-textarea" id="summaryInput" placeholder="Write a summary of what you accomplished today..."></textarea>
+        <button class="save-btn" id="saveSummary">Save Summary</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // State
+  let tasks = JSON.parse(localStorage.getItem('planner_tasks') || '[]');
+  let completedByDate = JSON.parse(localStorage.getItem('planner_completed') || '{}');
+  let summaries = JSON.parse(localStorage.getItem('planner_summaries') || '{}');
+  let currentFilter = 'active';
+  let viewYear, viewMonth;
+  let selectedDate = null;
+
+  const today = new Date();
+  viewYear = today.getFullYear();
+  viewMonth = today.getMonth();
+
+  // Elements
+  const taskInput = document.getElementById('taskInput');
+  const taskDeadline = document.getElementById('taskDeadline');
+  const taskPriority = document.getElementById('taskPriority');
+  const addBtn = document.getElementById('addBtn');
+  const taskList = document.getElementById('taskList');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const progressBar = document.getElementById('progressBar');
+  const progressCount = document.getElementById('progressCount');
+  const statActive = document.getElementById('statActive');
+  const statDone = document.getElementById('statDone');
+  const statOverdue = document.getElementById('statOverdue');
+  const calendarDays = document.getElementById('calendarDays');
+  const calendarMonth = document.getElementById('calendarMonth');
+  const prevMonthBtn = document.getElementById('prevMonth');
+  const nextMonthBtn = document.getElementById('nextMonth');
+  const todayBtn = document.getElementById('todayBtn');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalClose = document.getElementById('modalClose');
+  const modalTasks = document.getElementById('modalTasks');
+  const summaryInput = document.getElementById('summaryInput');
+  const saveSummaryBtn = document.getElementById('saveSummary');
+  const filterTabs = document.getElementById('filterTabs');
+  const headerDate = document.getElementById('headerDate');
+
+  // Header date
+  headerDate.textContent = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  // Save helpers
+  function saveTasks() { localStorage.setItem('planner_tasks', JSON.stringify(tasks)); }
+  function saveCompleted() { localStorage.setItem('planner_completed', JSON.stringify(completedByDate)); }
+  function saveSummaries() { localStorage.setItem('planner_summaries', JSON.stringify(summaries)); }
+
+  // Date key
+  function dateKey(d) {
+    if (typeof d === 'string') return d;
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function todayKey() { return dateKey(today); }
+
+  // Format date for display
+  function formatDate(str) {
+    const d = new Date(str + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  // Days until deadline
+  function daysUntil(deadline) {
+    if (!deadline) return null;
+    const dl = new Date(deadline + 'T00:00:00');
+    const now = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return Math.ceil((dl - now) / (1000 * 60 * 60 * 24));
+  }
+
+  // Add task
+  function addTask() {
+    const name = taskInput.value.trim();
+    if (!name) return;
+    tasks.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+      name,
+      deadline: taskDeadline.value || null,
+      priority: taskPriority.value,
+      done: false,
+      completedDate: null,
+      createdAt: todayKey()
+    });
+    saveTasks();
+    taskInput.value = '';
+    taskDeadline.value = '';
+    taskPriority.value = 'medium';
+    taskInput.focus();
+    render();
+  }
+
+  addBtn.addEventListener('click', addTask);
+  taskInput.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+
+  // Complete task
+  function completeTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    task.done = true;
+    task.completedDate = todayKey();
+
+    // Add to completed by date
+    const key = todayKey();
+    if (!completedByDate[key]) completedByDate[key] = [];
+    completedByDate[key].push({ id: task.id, name: task.name });
+
+    saveTasks();
+    saveCompleted();
+    render();
+  }
+
+  // Uncomplete task
+  function uncompleteTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    // Remove from completedByDate
+    if (task.completedDate && completedByDate[task.completedDate]) {
+      completedByDate[task.completedDate] = completedByDate[task.completedDate].filter(t => t.id !== id);
+      if (completedByDate[task.completedDate].length === 0) delete completedByDate[task.completedDate];
+    }
+    task.done = false;
+    task.completedDate = null;
+    saveTasks();
+    saveCompleted();
+    render();
+  }
+
+  // Delete task
+  function deleteTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task && task.completedDate && completedByDate[task.completedDate]) {
+      completedByDate[task.completedDate] = completedByDate[task.completedDate].filter(t => t.id !== id);
+      if (completedByDate[task.completedDate].length === 0) delete completedByDate[task.completedDate];
+      saveCompleted();
+    }
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks();
+    render();
+  }
+
+  // Filter tabs
+  filterTabs.addEventListener('click', e => {
+    if (!e.target.classList.contains('filter-tab')) return;
+    filterTabs.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    currentFilter = e.target.dataset.filter;
+    renderTaskList();
+  });
+
+  // Render task list
+  function renderTaskList() {
+    let filtered = tasks;
+    if (currentFilter === 'active') filtered = tasks.filter(t => !t.done);
+    else if (currentFilter === 'completed') filtered = tasks.filter(t => t.done);
+
+    if (filtered.length === 0) {
+      taskList.innerHTML = `<div class="empty-tasks">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        <div>${currentFilter === 'active' ? 'All caught up!' : currentFilter === 'completed' ? 'No completed tasks yet.' : 'No tasks yet. Add one above!'}</div>
+      </div>`;
+      return;
+    }
+
+    // Sort: overdue first, then by deadline, then by priority
+    const priOrd = { high: 0, medium: 1, low: 2 };
+    filtered.sort((a, b) => {
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      const da = daysUntil(a.deadline), db = daysUntil(b.deadline);
+      if (da !== null && db !== null) {
+        if (da < 0 && db >= 0) return -1;
+        if (db < 0 && da >= 0) return 1;
+        if (da !== db) return da - db;
+      }
+      if (da !== null && db === null) return -1;
+      if (da === null && db !== null) return 1;
+      return priOrd[a.priority] - priOrd[b.priority];
+    });
+
+    taskList.innerHTML = filtered.map(t => {
+      const days = daysUntil(t.deadline);
+      let deadlineText = '';
+      let deadlineClass = '';
+      if (t.deadline && !t.done) {
+        if (days < 0) { deadlineText = `${Math.abs(days)}d overdue`; deadlineClass = 'overdue'; }
+        else if (days === 0) { deadlineText = 'Due today'; deadlineClass = 'overdue'; }
+        else if (days === 1) deadlineText = 'Due tomorrow';
+        else deadlineText = `${days}d left`;
+      } else if (t.deadline && t.done) {
+        deadlineText = 'Completed ' + formatDate(t.completedDate);
+      }
+
+      return `<div class="task-item ${t.done ? 'completed' : ''}">
+        <div class="task-bubble ${t.done ? 'done' : ''}" data-id="${t.id}" data-done="${t.done}"></div>
+        <div class="task-content">
+          <div class="task-name">${escHtml(t.name)}</div>
+          <div class="task-details">
+            <span class="task-tag tag-${t.priority}">${t.priority}</span>
+            ${deadlineText ? `<span class="task-deadline ${deadlineClass}">${deadlineText}</span>` : ''}
+          </div>
+        </div>
+        <button class="task-delete" data-delete="${t.id}" title="Delete">&times;</button>
+      </div>`;
+    }).join('');
+
+    // Bubble click handlers
+    taskList.querySelectorAll('.task-bubble').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = b.dataset.id;
+        if (b.dataset.done === 'true') uncompleteTask(id);
+        else completeTask(id);
+      });
+    });
+    taskList.querySelectorAll('.task-delete').forEach(b => {
+      b.addEventListener('click', () => deleteTask(b.dataset.delete));
+    });
+  }
+
+  // Update progress
+  function updateProgress() {
+    const total = tasks.length;
+    const done = tasks.filter(t => t.done).length;
+    const active = total - done;
+    const overdue = tasks.filter(t => !t.done && t.deadline && daysUntil(t.deadline) < 0).length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    progressBar.style.width = pct + '%';
+    progressCount.textContent = `${done} / ${total}`;
+    statActive.textContent = active;
+    statDone.textContent = done;
+    statOverdue.textContent = overdue;
+  }
+
+  // Render calendar
+  function renderCalendar() {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    calendarMonth.textContent = months[viewMonth] + ' ' + viewYear;
+
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+
+    let html = '';
+
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
+      const d = daysInPrevMonth - i;
+      const m = viewMonth === 0 ? 11 : viewMonth - 1;
+      const y = viewMonth === 0 ? viewYear - 1 : viewYear;
+      const key = dateKey(new Date(y, m, d));
+      html += renderDayCell(d, key, true);
+    }
+
+    // Current month days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = dateKey(new Date(viewYear, viewMonth, d));
+      const isToday = (d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear());
+      html += renderDayCell(d, key, false, isToday);
+    }
+
+    // Next month days
+    const totalCells = firstDay + daysInMonth;
+    const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+    for (let d = 1; d <= remaining; d++) {
+      const m = viewMonth === 11 ? 0 : viewMonth + 1;
+      const y = viewMonth === 11 ? viewYear + 1 : viewYear;
+      const key = dateKey(new Date(y, m, d));
+      html += renderDayCell(d, key, true);
+    }
+
+    calendarDays.innerHTML = html;
+
+    // Day click handlers
+    calendarDays.querySelectorAll('.calendar-day').forEach(cell => {
+      cell.addEventListener('click', () => openDayModal(cell.dataset.date));
+    });
+  }
+
+  function renderDayCell(d, key, otherMonth, isToday) {
+    const dayTasks = completedByDate[key] || [];
+    const hasSummary = summaries[key] && summaries[key].trim();
+    const sel = selectedDate === key ? ' selected' : '';
+    let classes = 'calendar-day' + (otherMonth ? ' other-month' : '') + (isToday ? ' today' : '') + sel;
+
+    let pillsHtml = '';
+    const maxShow = 3;
+    for (let i = 0; i < Math.min(dayTasks.length, maxShow); i++) {
+      pillsHtml += `<div class="day-task-pill">${escHtml(dayTasks[i].name)}</div>`;
+    }
+    if (dayTasks.length > maxShow) {
+      pillsHtml += `<div class="day-task-more">+${dayTasks.length - maxShow} more</div>`;
+    }
+
+    return `<div class="${classes}" data-date="${key}">
+      <div class="day-number">${d}</div>
+      ${hasSummary ? '<div class="day-summary-dot"></div>' : ''}
+      <div class="day-tasks">${pillsHtml}</div>
+    </div>`;
+  }
+
+  // Day modal
+  function openDayModal(key) {
+    selectedDate = key;
+    modalTitle.textContent = formatDate(key);
+
+    const dayTasks = completedByDate[key] || [];
+    if (dayTasks.length === 0) {
+      modalTasks.innerHTML = '<div class="no-tasks-msg">No tasks completed on this day.</div>';
+    } else {
+      modalTasks.innerHTML = dayTasks.map((t, i) => `
+        <div class="modal-task-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          ${escHtml(t.name)}
+          <button class="modal-task-remove" data-idx="${i}" title="Remove from this day">&times;</button>
+        </div>
+      `).join('');
+
+      modalTasks.querySelectorAll('.modal-task-remove').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.idx);
+          completedByDate[key].splice(idx, 1);
+          if (completedByDate[key].length === 0) delete completedByDate[key];
+          saveCompleted();
+          openDayModal(key);
+          renderCalendar();
+        });
+      });
+    }
+
+    summaryInput.value = summaries[key] || '';
+    modalOverlay.classList.add('active');
+    renderCalendar();
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    selectedDate = null;
+    renderCalendar();
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  saveSummaryBtn.addEventListener('click', () => {
+    if (!selectedDate) return;
+    summaries[selectedDate] = summaryInput.value;
+    saveSummaries();
+    renderCalendar();
+  });
+
+  // Calendar nav
+  prevMonthBtn.addEventListener('click', () => {
+    viewMonth--;
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  });
+  nextMonthBtn.addEventListener('click', () => {
+    viewMonth++;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    renderCalendar();
+  });
+  todayBtn.addEventListener('click', () => {
+    viewYear = today.getFullYear();
+    viewMonth = today.getMonth();
+    renderCalendar();
+  });
+
+  // Escape HTML
+  function escHtml(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  // Render all
+  function render() {
+    renderTaskList();
+    updateProgress();
+    renderCalendar();
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
