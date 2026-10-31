@@ -792,9 +792,14 @@
   let viewYear, viewMonth;
   let selectedDate = null;
 
-  const today = new Date();
-  viewYear = today.getFullYear();
-  viewMonth = today.getMonth();
+  // Always get a fresh "today" so the page stays correct across midnight
+  function getToday() { return new Date(); }
+
+  (function initView() {
+    const t = getToday();
+    viewYear = t.getFullYear();
+    viewMonth = t.getMonth();
+  })();
 
   // Elements
   const taskInput = document.getElementById('taskInput');
@@ -822,8 +827,11 @@
   const filterTabs = document.getElementById('filterTabs');
   const headerDate = document.getElementById('headerDate');
 
-  // Header date
-  headerDate.textContent = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  // Header date — refresh on every render
+  function updateHeaderDate() {
+    headerDate.textContent = getToday().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  updateHeaderDate();
 
   // Save helpers
   function saveTasks() { localStorage.setItem('planner_tasks', JSON.stringify(tasks)); }
@@ -835,7 +843,7 @@
     if (typeof d === 'string') return d;
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
-  function todayKey() { return dateKey(today); }
+  function todayKey() { return dateKey(getToday()); }
 
   // Format date for display
   function formatDate(str) {
@@ -847,7 +855,8 @@
   function daysUntil(deadline) {
     if (!deadline) return null;
     const dl = new Date(deadline + 'T00:00:00');
-    const now = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const t = getToday();
+    const now = new Date(t.getFullYear(), t.getMonth(), t.getDate());
     return Math.ceil((dl - now) / (1000 * 60 * 60 * 24));
   }
 
@@ -882,10 +891,12 @@
     task.done = true;
     task.completedDate = todayKey();
 
-    // Add to completed by date
+    // Add to completed by date (guard against duplicates)
     const key = todayKey();
     if (!completedByDate[key]) completedByDate[key] = [];
-    completedByDate[key].push({ id: task.id, name: task.name });
+    if (!completedByDate[key].some(t => t.id === task.id)) {
+      completedByDate[key].push({ id: task.id, name: task.name });
+    }
 
     saveTasks();
     saveCompleted();
@@ -1036,7 +1047,8 @@
     // Current month days
     for (let d = 1; d <= daysInMonth; d++) {
       const key = dateKey(new Date(viewYear, viewMonth, d));
-      const isToday = (d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear());
+      const t = getToday();
+      const isToday = (d === t.getDate() && viewMonth === t.getMonth() && viewYear === t.getFullYear());
       html += renderDayCell(d, key, false, isToday);
     }
 
@@ -1144,8 +1156,9 @@
     renderCalendar();
   });
   todayBtn.addEventListener('click', () => {
-    viewYear = today.getFullYear();
-    viewMonth = today.getMonth();
+    const t = getToday();
+    viewYear = t.getFullYear();
+    viewMonth = t.getMonth();
     renderCalendar();
   });
 
@@ -1158,6 +1171,7 @@
 
   // Render all
   function render() {
+    updateHeaderDate();
     renderTaskList();
     updateProgress();
     renderCalendar();
